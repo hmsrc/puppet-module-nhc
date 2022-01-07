@@ -7,7 +7,7 @@ class nhc (
 
   # packages
   $package_ensure             = undef,
-  $package_version            = '1.4.2',
+  $package_version            = '1.4.3',
   $package_release            = '1',
   $package_url                = undef,
   $install_from_repo          = undef,

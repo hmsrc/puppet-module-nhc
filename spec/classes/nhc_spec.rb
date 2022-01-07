@@ -25,7 +25,7 @@ describe 'nhc' do
           should contain_package('lbnl-nhc').only_with({
             :ensure   => 'installed',
             :name     => 'lbnl-nhc',
-            :source   => "https://github.com/mej/nhc/releases/download/1.4.2/lbnl-nhc-1.4.2-1.el#{facts[:operatingsystemmajrelease]}.noarch.rpm",
+            :source   => "http://yumrepos.med.harvard.edu/centos-7/rc-local/lbnl-nhc-1.4.3-1.el#{facts[:operatingsystemmajrelease]}.noarch.rpm",
             :provider => 'rpm',
           })
         end
@@ -43,7 +43,7 @@ describe 'nhc' do
 
           it do
             should contain_package('lbnl-nhc').only_with({
-              :ensure   => "1.4.2-1.el#{facts[:operatingsystemmajrelease]}",
+              :ensure   => "1.4.3-1.el#{facts[:operatingsystemmajrelease]}",
               :name     => 'lbnl-nhc',
               :provider => 'yum',
               :require  => 'Yumrepo[local]'

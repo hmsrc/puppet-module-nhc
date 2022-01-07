@@ -91,9 +91,9 @@ $::osfamily == 'RedHat'
 
     nhc::ensure: 'present'
     nhc::package_ensure: undef
-    nhc::package_version: '1.4.2'
+    nhc::package_version: '1.4.3'
     nhc::package_release: '1'
-    nhc::package_url: "https://github.com/mej/nhc/releases/download/%VERSION%/lbnl-nhc-%VERSION%-%RELEASE%.el%{::operatingsystemmajrelease}.noarch.rpm"
+    nhc::package_url: "http://yumrepos.med.harvard.edu/centos-7/rc-local/lbnl-nhc-%VERSION%-%RELEASE%.el%{::operatingsystemmajrelease}.noarch.rpm"
     nhc::install_from_repo: undef
     nhc::checks: []
     nhc::settings: {}
