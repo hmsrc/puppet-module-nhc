@@ -14,39 +14,47 @@
 ### NHC Configuration Variables
 ###
 
-<% settings = scope.lookupvar('nhc::settings') -%>
-<% settings.keys.sort.each do |setting| -%>
-<% value = settings[setting] -%>
-<% if scope.function_is_bool([value]) -%>
+<%- @settings.keys.sort.each do |setting| -%>
+  <%- value = @settings[setting] -%>
+  <%- if !!value == value -%>
 * || export <%= setting %>=<%= value ? "1" : "0" %>
-<% else -%>
+  <%- else -%>
 * || export <%= setting %>=<%= value %>
-<% end -%>
-<% end -%>
+  <%- end -%>
+<%- end -%>
+<%- @settings_host.keys.sort.each do |host| -%>
+  <%- @settings_host[host].keys.sort.each do |setting| -%>
+    <%- value = @settings_host[host][setting] -%>
+    <%- if !!value == value -%>
+<%= host %> || export <%= setting %>=<%= value ? "1" : "0" %>
+    <%- else -%>
+<%= host %> || export <%= setting %>=<%= value %>
+    <%- end -%>
+  <%- end -%>
+<%- end -%>
 
 #######################################################################
 ###
 ### Checks
 ###
 
-<% checks = scope.lookupvar('nhc::checks') -%>
-<% if checks.is_a?(Array) -%>
-<% checks.each do |check| -%>
+<% if @checks.is_a?(Array) -%>
+  <%- @checks.each do |check| -%>
 * || <%= check %>
-<% end -%>
-<% else -%>
-<% if all_hosts = checks.delete('*') -%>
-<% all_hosts.each do |check| -%>
+  <%- end -%>
+<%- else -%>
+  <%- if all_hosts = @checks.delete('*') -%>
+    <%- all_hosts.each do |check| -%>
 * || <%= check %>
-<% end -%>
-<% end -%>
-<% checks.keys.sort.each do |host| %>
-<% if checks[host].is_a?(Array) -%>
-<% checks[host].each do |check| -%>
+    <%- end -%>
+  <%- end -%>
+  <%- @checks.keys.sort.each do |host| %>
+    <%- if @checks[host].is_a?(Array) -%>
+      <%- @checks[host].each do |check| -%>
 <%= host %> || <%= check %>
-<% end -%>
-<% else -%>
-<%= host %> || <%= checks[host] %>
-<% end -%>
-<% end -%>
-<% end -%>
+      <%- end -%>
+    <%- else -%>
+<%= host %> || <%= @checks[host] %>
+    <%- end -%>
+  <%- end -%>
+<%- end -%>

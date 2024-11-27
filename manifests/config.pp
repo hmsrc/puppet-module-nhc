@@ -1,8 +1,12 @@
 # private class
 class nhc::config {
-  if $caller_module_name != $module_name {
-    fail("Use of private class ${name} by ${caller_module_name}")
-  }
+  assert_private()
+
+  # Define template variables here so that nhc::conf can reuse template
+  $configs        = $nhc::configs
+  $settings       = $nhc::settings
+  $settings_host  = $nhc::settings_host
+  $checks         = $nhc::checks
 
   file { '/etc/nhc':
     ensure => $nhc::directory_ensure,
@@ -32,9 +36,8 @@ class nhc::config {
     require => File['/etc/nhc'],
   }
 
-  file { '/etc/sysconfig/nhc':
+  file { $nhc::sysconfig_path:
     ensure  => $nhc::file_ensure,
-    path    => $nhc::sysconfig_path,
     content => template('nhc/sysconfig.erb'),
     owner   => 'root',
     group   => 'root',

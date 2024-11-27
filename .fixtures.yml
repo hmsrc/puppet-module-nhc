@@ -1,8 +1,17 @@
 fixtures:
-  repositories:
+  forge_modules:
     stdlib:
-      repo: git://github.com/puppetlabs/puppetlabs-stdlib.git
-      ref: 4.3.1
-    logrotate: git://github.com/rodjek/puppet-logrotate.git
+      repo: puppetlabs/stdlib
+    yumrepo_core:
+      repo: puppetlabs/yumrepo_core
+    vcsrepo:
+      repo: puppetlabs/vcsrepo
+    logrotate:
+      repo: puppet/logrotate
+    yum:
+      repo: puppet/yum
+    # Needed by logrotate
+    systemd:
+      repo: puppet/systemd
   symlinks:
     nhc: "#{source_dir}"

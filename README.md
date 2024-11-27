@@ -1,20 +1,19 @@
 # puppet-module-nhc
 
-[![Build Status](https://travis-ci.org/treydock/puppet-module-nhc.png)](https://travis-ci.org/treydock/puppet-module-nhc)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/nhc.svg)](https://forge.puppetlabs.com/treydock/nhc)
+[![CI Status](https://github.com/treydock/puppet-module-nhc/workflows/CI/badge.svg?branch=master)](https://github.com/treydock/puppet-module-nhc/actions?query=workflow%3ACI)
 
-####Table of Contents
+#### Table of Contents
 
 1. [Overview](#overview)
 2. [Usage - Configuration options](#usage)
 3. [Reference - Parameter and detailed reference to all options](#reference)
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
-6. [TODO](#todo)
-7. [Additional Information](#additional-information)
 
 ## Overview
 
-This module manages the installation and configuration of LBNL Node Health CHeck (NHC).
+This module manages the installation and configuration of [LBNL Node Health CHeck (NHC)](https://github.com/mej/nhc).
 
 ## Usage
 
@@ -22,9 +21,7 @@ This module manages the installation and configuration of LBNL Node Health CHeck
 
 Configure a host with NHC.
 
-    class { 'nhc': }
-
-**Note**: The `nhc_checks` Hiera key can be used and is collected using the *hiera_array* lookup function.  If `nhc_checks` in present in Hiera, it is used as the default value for `checks`.
+    include nhc
 
 This is an example of using Hiera to define the default checks installed with NHC.
 
@@ -75,70 +72,33 @@ A Hash can also be used to define checks
         - 'check_hw_gm myri0'
         - 'check_hw_eth eth1'
 
+Defining settings that are for all hosts and a specific host:
+
+    nhc::settings:
+      DF_FLAGS: '"-Tkal -xgpfs -xfuse"'
+      DFI_FLAGS: '"-Tkal -xgpfs -xfuse"'
+      MAX_SYS_UID: '999'
+      NHC_RM: 'slurm'
+    nhc::settings_host:
+      'c0001':
+        PATH: '"$PATH:/some/other/sbin"'
+
 This is an example of using a local yum repository to install NHC.
 
-    nhc::install_from_repo: 'foo-repo'
+    nhc::install_method: repo
+    nhc::repo_name: local-repo
+
+This is an other example of using a custom package URL.
+
+    nhc::install_method: package
+    nhc::package_url: "https://example.com/lbnl-nhc-1.4.3-1.el7.custom.noarch.rpm"
+    nhc::package_name: "lbnl-nhc-1.4.3-1.el7.custom.noarch.rpm"
+
+It's possible to install from source (**this is default behavior for all but RedHat based systems**):
+
+    nhc::install_method: source
 
 ## Reference
 
-### Public Classes
+[http://treydock.github.io/puppet-module-nhc/](http://treydock.github.io/puppet-module-nhc/)
 
-#### Class: `nhc`:
-
-Installs and configures NHC.  Default values in Hiera format are below.
-
-$::osfamily == 'RedHat'
-
-    nhc::ensure: 'present'
-    nhc::package_ensure: undef
-    nhc::package_version: '1.4.2'
-    nhc::package_release: '1'
-    nhc::package_url: "https://github.com/mej/nhc/releases/download/%VERSION%/lbnl-nhc-%VERSION%-%RELEASE%.el%{::operatingsystemmajrelease}.noarch.rpm"
-    nhc::install_from_repo: undef
-    nhc::checks: []
-    nhc::settings: {}
-    nhc::config_overrides: {}
-    nhc::detached_mode: false
-    nhc::detached_mode_fail_nodata: false
-    nhc::program_name: 'nhc'
-    nhc::conf_dir: '/etc/nhc'
-    nhc::conf_file: '/etc/nhc/nhc.conf'
-    nhc::include_dir: '/etc/nhc/scripts'
-    nhc::log_file: '/var/log/nhc.log'
-    nhc::sysconfig_path: '/etc/sysconfig/nhc'
-    nhc::manage_logrotate: true
-    nhc::log_rotate_every: 'weekly'
-
-
-## Limitations
-
-This module has been tested on:
-
-* CentOS 6 x86_64
-
-## Development
-
-### Testing
-
-Testing requires the following dependencies:
-
-* rake
-* bundler
-
-Install gem dependencies
-
-    bundle install
-
-Run unit tests
-
-    bundle exec rake test
-
-If you have Vagrant >= 1.2.0 installed you can run system tests
-
-    bundle exec rake beaker
-
-## TODO
-
-## Further Information
-
-*
